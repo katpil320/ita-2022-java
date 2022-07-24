@@ -12,8 +12,10 @@ import java.util.stream.Stream;
 
 @Service
 public class ProductService {
-
-    private Map<Long, ProductDto> productDtoMap;
+    private Map<Long, ProductDto> productDtoMap; // Temporary for data storing in tests
+    public void setProductDtoMap(Map<Long, ProductDto> productDtoMap) {
+        this.productDtoMap = productDtoMap;
+    }
 
     @PostConstruct
     public void init() {
@@ -41,17 +43,17 @@ public class ProductService {
                 20L,
                 "https://data.bux.sk/book/064/213/0642136/large-zaciname_programovat_v_jazyku_java.jpg"
         );
-        productDtoMap = Stream.of(productDto,productDto1,productDto2)
+        setProductDtoMap(Stream.of(productDto,productDto1,productDto2)
                 .collect(Collectors.toMap(
                         ProductDto::getId,
                         Function.identity()
-                ));
+                )));
     }
 
-    public ProductDto findProduct(Long id) {
+    public ProductDto getById(Long id) {
         return productDtoMap.get(id);
     }
-    public Collection<ProductDto> findAllProducts() {
+    public Collection<ProductDto> getAll() {
         return productDtoMap.values();
     }
 }

@@ -20,11 +20,11 @@ public class ProductController {
 
     @GetMapping
     public Collection<ProductDto> getAllProducts() {
-        return productService.findAllProducts();
+        return productService.getAll();
     }
 
     @GetMapping("{id}")
     public ProductDto getProduct(@PathVariable("id") Long id) {
-        return productService.findProduct(id);
+        return productService.getById(id);
     }
 }
