@@ -1,16 +1,13 @@
 package org.junit.jupiter.api;
 
 import sk.martinliptak.ita.service.ProductService;
-
-
 import static org.assertj.core.api.Assertions.*;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ProductServiceTest {
 
     ProductService productService = new ProductService();
 
-    @BeforeAll
+    @BeforeEach
     void init() {
         productService.init();
     }
