@@ -12,8 +12,7 @@ import java.util.stream.Stream;
 
 @Service
 public class ProductService {
-
-    private Map<Long, ProductDto> productDtoMap;
+    private Map<Long, ProductDto> productDtoMap; // Temporary for data storing in tests
 
     @PostConstruct
     public void init() {
@@ -48,10 +47,10 @@ public class ProductService {
                 ));
     }
 
-    public ProductDto findProduct(Long id) {
+    public ProductDto getById(Long id) {
         return productDtoMap.get(id);
     }
-    public Collection<ProductDto> findAllProducts() {
+    public Collection<ProductDto> getAll() {
         return productDtoMap.values();
     }
 }
