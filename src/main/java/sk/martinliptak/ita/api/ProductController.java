@@ -7,7 +7,7 @@ import sk.martinliptak.ita.service.ProductService;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("api/v1/product")
+@RequestMapping("api/v1/products")
 @CrossOrigin("http://ita-frontend.s3-website.eu-central-1.amazonaws.com")
 public class ProductController {
     private final ProductService productService;
