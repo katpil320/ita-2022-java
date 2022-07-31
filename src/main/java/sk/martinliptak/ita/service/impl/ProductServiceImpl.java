@@ -7,7 +7,6 @@ import sk.martinliptak.ita.model.ProductDto;
 import sk.martinliptak.ita.repository.ProductRepository;
 import sk.martinliptak.ita.service.ProductService;
 
-import javax.annotation.PostConstruct;
 import javax.persistence.EntityNotFoundException;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -17,25 +16,6 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final String productNotFoundMessage = "Cannot find product with given id = %s";
-
-    @PostConstruct
-    public void init() {
-        Product product = new Product()
-                .setName("Bozek stavitel")
-                .setDescription("Kniha pro deti")
-                .setStock(142L)
-                .setPrice(32L)
-                .setImage("https://www.houseland.sk/image/catalog/ruc-borek.jpg");
-
-        Product product1 = new Product()
-                .setName("Programovani v jazyku Java")
-                .setDescription("Kniha pro programatory")
-                .setStock(24L)
-                .setPrice(300L)
-                .setImage("https://data.bux.sk/book/064/213/0642136/large-zaciname_programovat_v_jazyku_java.jpg");
-        productRepository.save(product);
-        productRepository.save(product1);
-    }
 
     @Override
     public ProductDto getById(Long id) {
