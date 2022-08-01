@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  postgres:
+    container_name: ita-postgres
+    image: library/postgres:13.1
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=ita2022
+      - POSTGRES_PASSWORD=ita2022
+      - POSTGRES_DB=ita2022
