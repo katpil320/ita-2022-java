@@ -3,8 +3,10 @@ package sk.martinliptak.ita.api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import sk.martinliptak.ita.model.CreateProductRequestDTO;
 import sk.martinliptak.ita.model.ProductDto;
 import sk.martinliptak.ita.service.ProductService;
+
 import java.util.Collection;
 
 @RestController
@@ -25,12 +27,12 @@ public class ProductController {
     }
 
     @PostMapping
-    public ProductDto createProduct(@RequestBody ProductDto productDto) {
+    public ProductDto createProduct(@RequestBody CreateProductRequestDTO productDto) {
         return productService.createProduct(productDto);
     }
 
     @PutMapping("{id}")
-    public ProductDto updateProduct(@RequestBody ProductDto productDto, @PathVariable("id") Long id) {
+    public ProductDto updateProduct(@RequestBody CreateProductRequestDTO productDto, @PathVariable("id") Long id) {
         return productService.updateProduct(productDto, id);
     }
 

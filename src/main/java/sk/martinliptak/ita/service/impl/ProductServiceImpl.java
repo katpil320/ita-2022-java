@@ -3,6 +3,7 @@ package sk.martinliptak.ita.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import sk.martinliptak.ita.domain.Product;
+import sk.martinliptak.ita.model.CreateProductRequestDTO;
 import sk.martinliptak.ita.model.ProductDto;
 import sk.martinliptak.ita.repository.ProductRepository;
 import sk.martinliptak.ita.service.ProductService;
@@ -19,9 +20,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto getById(Long id) {
-        return toDto(productRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        String.format(productNotFoundMessage, id))));
+        return toDto(productRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format(productNotFoundMessage, id))));
     }
 
     @Override
@@ -32,18 +31,17 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDto createProduct(ProductDto productDto) {
+    public ProductDto createProduct(CreateProductRequestDTO productDto) {
         Product product = toProduct(productDto);
         Product savedProduct = productRepository.save(product);
         return toDto(savedProduct);
     }
 
     @Override
-    public ProductDto updateProduct(ProductDto productDto, Long id) {
+    public ProductDto updateProduct(CreateProductRequestDTO productDto, Long id) {
         if (!productRepository.existsById(id)) {
             throw new EntityNotFoundException(String.format(productNotFoundMessage, id));
-        }
-        else {
+        } else {
             Product product = productRepository.findById(id).get();
             // Update data
             product.setName(productDto.getName())
@@ -51,22 +49,20 @@ public class ProductServiceImpl implements ProductService {
                     .setImage(productDto.getImage())
                     .setStock(product.getStock())
                     .setPrice(productDto.getPrice());
-            Product updatedProduct = productRepository.save(product);
-            return toDto(updatedProduct);
+            return toDto(productRepository.save(product));
         }
-    };
+    }
 
     @Override
     public void deleteProduct(Long id) {
         if (!productRepository.existsById(id)) {
             throw new EntityNotFoundException(String.format(productNotFoundMessage, id));
-        }
-        else {
+        } else {
             productRepository.deleteById(id);
         }
     }
 
-    private Product toProduct(ProductDto productDto) {
+    private Product toProduct(CreateProductRequestDTO productDto) {
         Product product = new Product()
                 .setName(productDto.getName())
                 .setDescription(productDto.getDescription())
