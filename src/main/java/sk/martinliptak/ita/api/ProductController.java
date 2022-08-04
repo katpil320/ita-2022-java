@@ -7,6 +7,7 @@ import sk.martinliptak.ita.model.CreateProductRequestDTO;
 import sk.martinliptak.ita.model.ProductDto;
 import sk.martinliptak.ita.service.ProductService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 
 @RestController
@@ -27,13 +28,13 @@ public class ProductController {
     }
 
     @PostMapping
-    public ProductDto createProduct(@RequestBody CreateProductRequestDTO productDto) {
-        return productService.createProduct(productDto);
+    public ProductDto createProduct(HttpServletRequest request, @RequestBody CreateProductRequestDTO productDto) {
+        return productService.createProduct(request, productDto);
     }
 
     @PutMapping("{id}")
-    public ProductDto updateProduct(@RequestBody CreateProductRequestDTO productDto, @PathVariable("id") Long id) {
-        return productService.updateProduct(productDto, id);
+    public ProductDto updateProduct(HttpServletRequest request, @RequestBody CreateProductRequestDTO productDto, @PathVariable("id") Long id) {
+        return productService.updateProduct(request,productDto, id);
     }
 
     @DeleteMapping("{id}")
