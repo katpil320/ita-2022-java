@@ -8,11 +8,12 @@ import sk.martinliptak.ita.model.ProductDto;
 import sk.martinliptak.ita.service.ProductService;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.Collection;
 
 @RestController
 @RequestMapping("api/v1/products")
-@CrossOrigin("http://ita-frontend.s3-website.eu-central-1.amazonaws.com")
+@CrossOrigin("http://localhost:8088")
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
@@ -28,12 +29,12 @@ public class ProductController {
     }
 
     @PostMapping
-    public ProductDto createProduct(HttpServletRequest request, @RequestBody CreateProductRequestDTO productDto) {
+    public ProductDto createProduct(HttpServletRequest request, @Valid @RequestBody CreateProductRequestDTO productDto) {
         return productService.createProduct(request, productDto);
     }
 
     @PutMapping("{id}")
-    public ProductDto updateProduct(HttpServletRequest request, @RequestBody CreateProductRequestDTO productDto, @PathVariable("id") Long id) {
+    public ProductDto updateProduct(HttpServletRequest request, @Valid @RequestBody CreateProductRequestDTO productDto, @PathVariable("id") Long id) {
         return productService.updateProduct(request,productDto, id);
     }
 

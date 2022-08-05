@@ -22,7 +22,7 @@ public class ProductServiceImpl implements ProductService {
     private final String productNotFoundMessage = "Cannot find product with given id = %s";
 
     // Logging patterns
-    private final String incomingPayloadLogPattern = "Incoming {} request on {}, body={}";
+    private final String incomingPayloadLogPattern = "Incoming {} request on {}, payload={}";
 
     @Override
     public ProductDto getById(Long id) {
@@ -52,7 +52,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductDto updateProduct(HttpServletRequest request, CreateProductRequestDTO productDto, Long id) {
         log.debug(incomingPayloadLogPattern, request.getMethod(), request.getRequestURI(), productDto);
         log.info("Updating product({})", id);
-        if (!productRepository.existsById(id)) {
+        if (productRepository.findById(id).isEmpty()) {
             throw new EntityNotFoundException(String.format(productNotFoundMessage, id));
         } else {
             Product product = productRepository.findById(id).get();
@@ -62,7 +62,7 @@ public class ProductServiceImpl implements ProductService {
                     .setImage(productDto.getImage())
                     .setStock(product.getStock())
                     .setPrice(productDto.getPrice());
-            log.debug("Product({}) updated - {}", id, product.toString());
+            log.debug("Product({}) updated - {}", id, product);
             return toDto(productRepository.save(product));
         }
     }
@@ -78,18 +78,17 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private Product toProduct(CreateProductRequestDTO productDto) {
-        Product product = new Product()
+        return new Product()
                 .setName(productDto.getName())
                 .setDescription(productDto.getDescription())
                 .setImage(productDto.getImage())
                 .setStock(productDto.getStock())
                 .setPrice(productDto.getPrice());
-        return product;
     }
 
 
     private ProductDto toDto(Product product) {
-        ProductDto productDto = new ProductDto(
+        return new ProductDto(
                 product.getId(),
                 product.getName(),
                 product.getDescription(),
@@ -97,6 +96,5 @@ public class ProductServiceImpl implements ProductService {
                 product.getStock(),
                 product.getImage()
         );
-        return productDto;
     }
 }
