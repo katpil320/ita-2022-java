@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
+    private final HttpServletRequest request;
     private final String incomingPayloadLogPattern = "Incoming {} request on {}, payload={}";
 
     @Override
@@ -36,7 +37,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDto createProduct(HttpServletRequest request, CreateProductRequestDto productDto) {
+    public ProductDto createProduct(CreateProductRequestDto productDto) {
         log.debug(incomingPayloadLogPattern, request.getMethod(), request.getRequestURI(), productDto);
         log.info("Creating product");
         Product product = toProduct(productDto);
@@ -46,7 +47,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDto updateProduct(HttpServletRequest request, CreateProductRequestDto productDto, Long id) {
+    public ProductDto updateProduct(CreateProductRequestDto productDto, Long id) {
         log.debug(incomingPayloadLogPattern, request.getMethod(), request.getRequestURI(), productDto);
         log.info("Updating product({})", id);
         if (!productRepository.existsById(id)) {

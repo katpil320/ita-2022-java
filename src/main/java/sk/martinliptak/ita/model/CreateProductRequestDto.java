@@ -21,7 +21,7 @@ public class CreateProductRequestDto {
     @NotNull
     @Min(1)
     private Long price;
-    @Min(0)
+    @Positive
     private Long stock;
     @NotBlank
     private String image;
