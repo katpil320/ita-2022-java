@@ -1,9 +1,9 @@
-package sk.martinliptak.ita.api;
+package sk.martinliptak.ita.rest;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import sk.martinliptak.ita.model.CreateProductRequestDTO;
+import sk.martinliptak.ita.model.CreateProductRequestDto;
 import sk.martinliptak.ita.model.ProductDto;
 import sk.martinliptak.ita.service.ProductService;
 
@@ -29,13 +29,13 @@ public class ProductController {
     }
 
     @PostMapping
-    public ProductDto createProduct(HttpServletRequest request, @Valid @RequestBody CreateProductRequestDTO productDto) {
+    public ProductDto createProduct(HttpServletRequest request, @Valid @RequestBody CreateProductRequestDto productDto) {
         return productService.createProduct(request, productDto);
     }
 
     @PutMapping("{id}")
-    public ProductDto updateProduct(HttpServletRequest request, @Valid @RequestBody CreateProductRequestDTO productDto, @PathVariable("id") Long id) {
-        return productService.updateProduct(request,productDto, id);
+    public ProductDto updateProduct(HttpServletRequest request, @Valid @RequestBody CreateProductRequestDto productDto, @PathVariable("id") Long id) {
+        return productService.updateProduct(request, productDto, id);
     }
 
     @DeleteMapping("{id}")

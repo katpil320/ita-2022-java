@@ -11,11 +11,11 @@ import javax.validation.constraints.*;
 @Setter
 @AllArgsConstructor
 @ToString
-public class CreateProductRequestDTO {
-    @NotBlank(message = "Name must be included")
+public class CreateProductRequestDto {
+    @NotBlank
     @Size(max = 256)
     private String name;
-    @NotBlank(message = "Description must be included")
+    @NotBlank
     @Size(max = 512)
     private String description;
     @NotNull
@@ -23,6 +23,6 @@ public class CreateProductRequestDTO {
     private Long price;
     @Min(0)
     private Long stock;
-    @NotBlank(message = "Image must be included")
+    @NotBlank
     private String image;
 }

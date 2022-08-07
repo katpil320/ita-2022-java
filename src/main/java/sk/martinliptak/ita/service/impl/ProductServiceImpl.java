@@ -4,12 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import sk.martinliptak.ita.domain.Product;
-import sk.martinliptak.ita.model.CreateProductRequestDTO;
+import sk.martinliptak.ita.exception.ProductNotFoundException;
+import sk.martinliptak.ita.model.CreateProductRequestDto;
 import sk.martinliptak.ita.model.ProductDto;
 import sk.martinliptak.ita.repository.ProductRepository;
 import sk.martinliptak.ita.service.ProductService;
 
-import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -19,15 +19,12 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
-    private final String productNotFoundMessage = "Cannot find product with given id = %s";
-
-    // Logging patterns
     private final String incomingPayloadLogPattern = "Incoming {} request on {}, payload={}";
 
     @Override
     public ProductDto getById(Long id) {
         log.info("Fetching product({})", id);
-        return toDto(productRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format(productNotFoundMessage, id))));
+        return toDto(productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id)));
     }
 
     @Override
@@ -39,7 +36,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDto createProduct(HttpServletRequest request, CreateProductRequestDTO productDto) {
+    public ProductDto createProduct(HttpServletRequest request, CreateProductRequestDto productDto) {
         log.debug(incomingPayloadLogPattern, request.getMethod(), request.getRequestURI(), productDto);
         log.info("Creating product");
         Product product = toProduct(productDto);
@@ -49,21 +46,16 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDto updateProduct(HttpServletRequest request, CreateProductRequestDTO productDto, Long id) {
+    public ProductDto updateProduct(HttpServletRequest request, CreateProductRequestDto productDto, Long id) {
         log.debug(incomingPayloadLogPattern, request.getMethod(), request.getRequestURI(), productDto);
         log.info("Updating product({})", id);
-        if (productRepository.findById(id).isEmpty()) {
-            throw new EntityNotFoundException(String.format(productNotFoundMessage, id));
+        if (!productRepository.existsById(id)) {
+            throw new ProductNotFoundException(id);
         } else {
-            Product product = productRepository.findById(id).get();
-            // Update data
-            product.setName(productDto.getName())
-                    .setDescription(productDto.getDescription())
-                    .setImage(productDto.getImage())
-                    .setStock(product.getStock())
-                    .setPrice(productDto.getPrice());
+            Product product = toProduct(productDto).setId(id);
+            productRepository.save(product);
             log.debug("Product({}) updated - {}", id, product);
-            return toDto(productRepository.save(product));
+            return toDto(product);
         }
     }
 
@@ -71,13 +63,13 @@ public class ProductServiceImpl implements ProductService {
     public void deleteProduct(Long id) {
         log.info("Deleting product({})", id);
         if (!productRepository.existsById(id)) {
-            throw new EntityNotFoundException(String.format(productNotFoundMessage, id));
+            throw new ProductNotFoundException(id);
         } else {
             productRepository.deleteById(id);
         }
     }
 
-    private Product toProduct(CreateProductRequestDTO productDto) {
+    private Product toProduct(CreateProductRequestDto productDto) {
         return new Product()
                 .setName(productDto.getName())
                 .setDescription(productDto.getDescription())
