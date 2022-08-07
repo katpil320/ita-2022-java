@@ -1,17 +1,18 @@
-package sk.martinliptak.ita.api;
+package sk.martinliptak.ita.rest;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import sk.martinliptak.ita.model.CreateProductRequestDTO;
+import sk.martinliptak.ita.model.CreateProductRequestDto;
 import sk.martinliptak.ita.model.ProductDto;
 import sk.martinliptak.ita.service.ProductService;
 
+import javax.validation.Valid;
 import java.util.Collection;
 
 @RestController
 @RequestMapping("api/v1/products")
-@CrossOrigin("http://ita-frontend.s3-website.eu-central-1.amazonaws.com")
+@CrossOrigin("http://localhost:8088")
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
@@ -27,12 +28,12 @@ public class ProductController {
     }
 
     @PostMapping
-    public ProductDto createProduct(@RequestBody CreateProductRequestDTO productDto) {
+    public ProductDto createProduct(@Valid @RequestBody CreateProductRequestDto productDto) {
         return productService.createProduct(productDto);
     }
 
     @PutMapping("{id}")
-    public ProductDto updateProduct(@RequestBody CreateProductRequestDTO productDto, @PathVariable("id") Long id) {
+    public ProductDto updateProduct(@Valid @RequestBody CreateProductRequestDto productDto, @PathVariable("id") Long id) {
         return productService.updateProduct(productDto, id);
     }
 

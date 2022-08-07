@@ -1,6 +1,7 @@
 package sk.martinliptak.ita.domain;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
@@ -8,6 +9,7 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Data
+@NoArgsConstructor
 @Accessors(chain = true)
 public class Product {
     @Id
