@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import sk.martinliptak.ita.annotation.StartsWithUppercase;
 
 import javax.validation.constraints.*;
 
@@ -14,6 +15,7 @@ import javax.validation.constraints.*;
 public class CreateProductRequestDto {
     @NotBlank
     @Size(max = 256)
+    @StartsWithUppercase
     private String name;
     @NotBlank
     @Size(max = 512)

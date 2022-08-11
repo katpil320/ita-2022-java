@@ -47,11 +47,12 @@ public class ItaCommonControllerAdvice extends ResponseEntityExceptionHandler {
 
     @Override
     public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        ServletWebRequest servletWebRequest = (ServletWebRequest) request;
 
         final String errors = ex.getBindingResult().getAllErrors().stream()
                 .map(error -> ((FieldError) error).getField() + " " + error.getDefaultMessage())
                 .collect(Collectors.joining(", "));
-        log.error("An exception occurred during validation", ex);
+        log.error("An unexpected exception occurred while processing " + servletWebRequest.getRequest().getMethod() + " on " + servletWebRequest.getRequest().getRequestURL(), ex);
         return handleExceptionInternal(
                 ex,
                 new ExceptionDto("0002", errors),
