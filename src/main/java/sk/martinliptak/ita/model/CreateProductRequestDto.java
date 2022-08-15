@@ -1,9 +1,7 @@
 package sk.martinliptak.ita.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import lombok.experimental.Accessors;
 import sk.martinliptak.ita.annotation.StartsWithUppercase;
 
 import javax.validation.constraints.*;
@@ -11,6 +9,8 @@ import javax.validation.constraints.*;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
+@Accessors(chain = true)
 @ToString
 public class CreateProductRequestDto {
     @NotBlank
