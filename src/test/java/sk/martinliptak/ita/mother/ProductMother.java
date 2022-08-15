@@ -14,7 +14,7 @@ public class ProductMother {
                 .setPrice(450L)
                 .setStock(21L);
     }
-    public static Product prepareProduct2() {
+    public static Product prepareProduct1() {
         return new Product()
                 .setId(2L)
                 .setName("Pat a Mat nás baví ")
@@ -23,6 +23,7 @@ public class ProductMother {
                 .setPrice(249L)
                 .setStock(1432L);
     }
+
     public static ProductDto prepareProductDto() {
         return new ProductDto()
                 .setId(1L)
@@ -32,6 +33,15 @@ public class ProductMother {
                 .setPrice(450L)
                 .setStock(21L);
     }
+    public static ProductDto prepareProductDto1() {
+        return new ProductDto()
+                .setId(2L)
+                .setName("Pat a Mat nás baví ")
+                .setDescription("Pat a Mat vám ve třinácti nových epizodách plných skvělých gagů opět dokáží, jací jsou to šikulové.")
+                .setImage("https://mrtns.eu/tovar/_l/463/l463501.jpg?v=16596936211")
+                .setPrice(249L)
+                .setStock(1432L);
+    }
     public static CreateProductRequestDto prepareCreateProductDto() {
         return new CreateProductRequestDto()
                 .setName("Začínáme programovat v jazyku Java")
@@ -40,7 +50,7 @@ public class ProductMother {
                 .setPrice(450L)
                 .setStock(21L);
     }
-    public static CreateProductRequestDto prepareCreateProductDto2() {
+    public static CreateProductRequestDto prepareCreateProductDto1() {
         return new CreateProductRequestDto()
                 .setName("Pat a Mat nás baví ")
                 .setDescription("Pat a Mat vám ve třinácti nových epizodách plných skvělých gagů opět dokáží, jací jsou to šikulové.")

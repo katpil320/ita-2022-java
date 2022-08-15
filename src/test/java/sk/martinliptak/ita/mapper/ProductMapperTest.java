@@ -36,9 +36,9 @@ class ProductMapperTest {
 
     @Test
     void mergeProduct() {
-        CreateProductRequestDto source = prepareCreateProductDto2(); // A different dto
+        CreateProductRequestDto source = prepareCreateProductDto1(); // A different dto
         Product target = prepareProduct(); // Being updated (Becomes result after merge)
-        Product expectedResult = prepareProduct2(); // Expected
+        Product expectedResult = prepareProduct1(); // Expected
 
         productMapper.mergeProduct(target, source);
 
