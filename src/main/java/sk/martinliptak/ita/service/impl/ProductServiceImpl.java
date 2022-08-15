@@ -30,7 +30,9 @@ public class ProductServiceImpl implements ProductService {
     @Transactional(readOnly = true)
     public ProductDto getById(Long id) {
         log.info("Fetching product({})", id);
-        return productMapper.toDto(productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id)));
+        return productRepository.findById(id)
+                .map(productMapper::toDto)
+                .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
     @Override
@@ -57,7 +59,8 @@ public class ProductServiceImpl implements ProductService {
     public ProductDto updateProduct(CreateProductRequestDto productDto, Long id) {
         log.debug(incomingPayloadLogPattern, request.getMethod(), request.getRequestURI(), productDto);
         log.info("Updating product({})", id);
-        Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(id));
         productMapper.mergeProduct(product, productDto);
         log.debug("Product({}) updated - {}", id, product);
         return productMapper.toDto(product);

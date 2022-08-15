@@ -18,13 +18,13 @@ class ItaValidatorTest {
     private ConstraintValidatorContext cxt;
 
     @Test
-    void isValid() {
-        String uppercaseTitle = "Uppercase title";
-        String lowercaseTitle = "lowercase title";
-        Boolean positiveResult = itaValidator.isValid(uppercaseTitle, cxt);
-        Boolean negativeResult = itaValidator.isValid(lowercaseTitle, cxt);
-
-        assertThat(positiveResult).isTrue();
-        assertThat(negativeResult).isFalse();
+    void stringValid() {
+        Boolean result = itaValidator.isValid("An uppercase title", cxt);
+        assertThat(result).isTrue();
+    }
+    @Test
+    void stringInvalid() {
+        Boolean result = itaValidator.isValid("a lowercase title", cxt);
+        assertThat(result).isFalse();
     }
 }

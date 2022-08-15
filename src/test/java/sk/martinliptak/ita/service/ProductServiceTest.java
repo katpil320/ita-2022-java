@@ -19,10 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static sk.martinliptak.ita.mapper.ProductAssertions.assertFieldsEquality;
 import static sk.martinliptak.ita.mother.ProductMother.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -51,8 +49,7 @@ public class ProductServiceTest {
 
         ProductDto result = productService.getById(1L);
 
-        assertThat(result.getId()).isEqualTo(expectedResult.getId());
-        assertFieldsEquality(result, expectedResult);
+        assertThat(result).isEqualTo(expectedResult);
 
         verify(productRepository).findById(1L);
         verify(productMapper).toDto(product);
@@ -70,13 +67,11 @@ public class ProductServiceTest {
         when(productMapper.toDto(product1)).thenReturn(productDto1);
 
         List<ProductDto> result = productService.getAll().stream().toList();
-        assertThat(result.size()).isEqualTo(2);
-        assertFieldsEquality(result.get(0), product);
-        assertFieldsEquality(result.get(1), product1);
+
+        assertThat(result).contains(productDto, productDto1);
 
         verify(productRepository).findAll();
         verify(productMapper).toDto(product);
-        verify(productMapper).toDto(product1);
     }
 
     @Test
@@ -91,7 +86,7 @@ public class ProductServiceTest {
 
         ProductDto result = productService.createProduct(createDto);
 
-        assertFieldsEquality(createDto, result);
+        assertThat(result).isEqualTo(expectedResult);
 
         verify(productRepository, times(1)).save(product);
         verify(productMapper).toDto(product);
@@ -109,7 +104,7 @@ public class ProductServiceTest {
         when(productMapper.toDto(product)).thenReturn(productDto);
         ProductDto result = productService.updateProduct(createDto, targetId);
 
-        assertThat(result.getId()).isEqualTo(targetId);
+        assertThat(result).isEqualTo(productDto);
 
         verify(productMapper).toDto(product);
         verify(productMapper).mergeProduct(product, createDto);
@@ -140,5 +135,33 @@ public class ProductServiceTest {
 
         verify(productRepository, times(2)).findById(1L);
         verify(productRepository).existsById(1L);
+    }
+
+    @Test
+    void fetchingNonExistingProduct() throws ProductNotFoundException {
+        Long id = 1L;
+
+        when(productRepository.findById(id)).thenReturn(Optional.empty());
+        assertThatThrownBy(() -> productService.getById(id)).isInstanceOf(ProductNotFoundException.class);
+        verify(productRepository).findById(id);
+    }
+
+    @Test
+    void updatingNonExistingProduct() throws ProductNotFoundException {
+        Long id = 1L;
+        CreateProductRequestDto createProductDto = prepareCreateProductDto();
+
+        when(productRepository.findById(id)).thenReturn(Optional.empty());
+        assertThatThrownBy(() -> productService.updateProduct(createProductDto, 1L)).isInstanceOf(ProductNotFoundException.class);
+        verify(productRepository).findById(id);
+    }
+
+    @Test
+    void deletingNonExistingProduct() throws  ProductNotFoundException {
+        Long id = 1L;
+        when(productRepository.existsById(1L)).thenReturn(false);
+        assertThatThrownBy(() -> productService.deleteProduct(id)).isInstanceOf(ProductNotFoundException.class);
+
+        verify(productRepository).existsById(id);
     }
 }
