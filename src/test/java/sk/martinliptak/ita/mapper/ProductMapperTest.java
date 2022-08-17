@@ -3,7 +3,7 @@ package sk.martinliptak.ita.mapper;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 import sk.martinliptak.ita.domain.Product;
-import sk.martinliptak.ita.model.CreateProductRequestDto;
+import sk.martinliptak.ita.model.ProductRequestDto;
 import sk.martinliptak.ita.model.ProductDto;
 
 
@@ -25,7 +25,7 @@ class ProductMapperTest {
 
     @Test
     void toDomain() {
-        CreateProductRequestDto source = prepareCreateProductDto();
+        ProductRequestDto source = prepareCreateProductDto();
         Product expectedResult = prepareProduct();
         Product result = productMapper.toDomain(source);
 
@@ -35,7 +35,7 @@ class ProductMapperTest {
 
     @Test
     void mergeProduct() {
-        CreateProductRequestDto source = prepareCreateProductDto1(); // A different dto
+        ProductRequestDto source = prepareCreateProductDto1(); // A different dto
         Product target = prepareProduct(); // Being updated (Becomes result after merge)
         Product expectedResult = prepareProduct1(); // Expected
 
