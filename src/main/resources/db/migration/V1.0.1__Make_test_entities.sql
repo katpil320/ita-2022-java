@@ -24,3 +24,20 @@ VALUES (1,
         1,
         1);
 
+INSERT INTO product(id,
+                    description,
+                    image,
+                    name,
+                    price,
+                    stock,
+                    author_id,
+                    genre_id)
+VALUES (2,
+        'Nic pro slabe povahy',
+        'nejaky image 2',
+        'Programovanie v jazyku Java',
+        42,
+        24,
+        1,
+        1);
+

@@ -17,7 +17,6 @@ import sk.martinliptak.ita.repository.GenreRepository;
 import sk.martinliptak.ita.repository.ProductRepository;
 import sk.martinliptak.ita.service.ProductService;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -30,14 +29,10 @@ public class ProductServiceImpl implements ProductService {
     private final AuthorRepository authorRepository;
     private final GenreRepository genreRepository;
 
-    private final HttpServletRequest request;
-    private final String incomingPayloadLogPattern = "Incoming {} request on {}, payload={}";
     private final ProductMapper productMapper;
 
-    @Override
     @Transactional(readOnly = true)
-    public ProductDto getById(Long id) {
-        log.info("Fetching product({})", id);
+    public ProductDto findProduct(Long id) {
         return productRepository.findById(id)
                 .map(productMapper::toDto)
                 .orElseThrow(() -> new ProductNotFoundException(id));
@@ -45,8 +40,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(readOnly = true)
-    public Collection<ProductSimpleDto> findAll() {
-        log.info("Fetching all products");
+    public Collection<ProductSimpleDto> findAllProducts() {
         return productRepository.findAll()
                 .stream().map(productMapper::toSimpleDto)
                 .collect(Collectors.toList());
@@ -55,9 +49,6 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public ProductDto createProduct(ProductRequestDto requestDto) {
-        log.debug(incomingPayloadLogPattern, request.getMethod(), request.getRequestURI(), requestDto);
-        log.info("Creating product");
-
         Long authorId = requestDto.getAuthorId();
         Long genreId = requestDto.getGenreId();
 
@@ -68,18 +59,13 @@ public class ProductServiceImpl implements ProductService {
         product.setGenre(genreRepository.findById(genreId)
                 .orElseThrow(() -> new GenreNotFoundException(genreId)));
 
-        Product result = productRepository.save(product);
-        log.debug("Created new product - {}", result);
-
+        productRepository.save(product);
         return productMapper.toDto(product);
     }
 
     @Override
     @Transactional
     public ProductDto updateProduct(ProductRequestDto requestDto, Long id) {
-        log.debug(incomingPayloadLogPattern, request.getMethod(), request.getRequestURI(), requestDto);
-        log.info("Updating product({})", id);
-
         Long authorId = requestDto.getAuthorId();
         Long genreId = requestDto.getGenreId();
 
@@ -92,16 +78,12 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new GenreNotFoundException(genreId)));
 
         productMapper.mergeProduct(product, requestDto);
-
-        log.debug("Product({}) updated - {}", id, product);
-
         return productMapper.toDto(product);
     }
 
     @Override
     @Transactional
     public void deleteProduct(Long id) {
-        log.info("Deleting product({})", id);
         if (!productRepository.existsById(id)) {
             throw new ProductNotFoundException(id);
         } else {

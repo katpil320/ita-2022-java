@@ -16,5 +16,9 @@ public class Order extends AbstractEntity {
     private OrderStatus status;
 
     @ManyToMany
+    @JoinTable(
+            name = "eshop_order_products",
+            joinColumns = @JoinColumn(name = "fk_eshop_order"),
+            inverseJoinColumns = @JoinColumn(name = "fk_product"))
     private Set<Product> products;
 }

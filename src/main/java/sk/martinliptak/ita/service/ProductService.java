@@ -8,8 +8,8 @@ import java.util.Collection;
 
 
 public interface ProductService {
-    ProductDto getById(Long id);
-    Collection<ProductSimpleDto> findAll();
+    ProductDto findProduct(Long id);
+    Collection<ProductSimpleDto> findAllProducts();
 
     ProductDto createProduct(ProductRequestDto productDto);
 

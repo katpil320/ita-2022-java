@@ -13,7 +13,7 @@ import sk.martinliptak.ita.repository.CartRepository;
 import sk.martinliptak.ita.repository.OrderRepository;
 import sk.martinliptak.ita.service.OrderService;
 
-import java.util.stream.Collectors;
+import java.util.HashSet;
 
 @Service
 @RequiredArgsConstructor
@@ -29,8 +29,9 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new CartNotFoundException(cartId));
         Order order = new Order()
                 .setStatus(OrderStatus.NEW)
-                .setProducts(cart.getProducts().stream().collect(Collectors.toSet()));
+                .setProducts(new HashSet<>(cart.getProducts()));
         orderRepository.save(order);
+        cart.getProducts().clear();
         return orderMapper.toDto(order);
     }
 }
