@@ -2,7 +2,6 @@ package sk.martinliptak.ita.aspect;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -62,8 +61,8 @@ public class ProductServiceAspect {
         log.info("Deleting product ({})", id);
     }
 
-    @After("execution(* sk.martinliptak.ita.service.impl.ProductServiceImpl.deleteProduct(..))")
-    public void afterDeleteProductExecution() {
+    @AfterReturning("execution(* sk.martinliptak.ita.service.impl.ProductServiceImpl.deleteProduct(..))")
+    public void afterDeleteProductReturn() {
         log.debug("Product deleted");
     }
 }
