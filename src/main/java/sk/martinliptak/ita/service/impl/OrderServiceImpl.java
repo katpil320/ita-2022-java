@@ -34,7 +34,7 @@ public class OrderServiceImpl implements OrderService {
                 .setStatus(OrderStatus.NEW)
                 .setProducts(new HashSet<>(cart.getProducts()));
         orderRepository.save(order);
-        cart.getProducts().clear();
+        cartRepository.deleteById(cartId);
         return orderMapper.toDto(order);
     }
 }

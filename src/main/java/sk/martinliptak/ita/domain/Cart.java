@@ -9,7 +9,6 @@ import java.util.Set;
 @Entity
 @Data
 @NoArgsConstructor
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Cart extends AbstractEntity {
     @ManyToMany
     @JoinTable(

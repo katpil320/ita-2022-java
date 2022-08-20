@@ -10,7 +10,6 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "eshop_order")
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Order extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;

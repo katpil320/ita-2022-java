@@ -1,8 +1,8 @@
 INSERT INTO author(id, bio, birth_date, name)
-VALUES (1, 'Som zruteny', null, 'Peter Smutny');
+VALUES (1, 'Som zruteny', current_date, 'Peter Smutny');
 
 INSERT INTO author(id, bio, birth_date, name)
-VALUES (2, 'Neexistujem', null, 'Noname');
+VALUES (2, 'Super info o mne', current_date, 'Jozef Suprovy');
 
 INSERT INTO genre(id, description, name)
 VALUES (1, 'Super trapne vtipy', 'Komedia');
