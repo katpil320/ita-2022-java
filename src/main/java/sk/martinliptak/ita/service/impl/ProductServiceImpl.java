@@ -33,6 +33,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional(readOnly = true)
     public ProductDto findProduct(Long id) {
+        log.info("Fetching product {}", id);
         return productRepository.findById(id)
                 .map(productMapper::toDto)
                 .orElseThrow(() -> new ProductNotFoundException(id));
@@ -41,6 +42,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional(readOnly = true)
     public Collection<ProductSimpleDto> findAllProducts() {
+        log.info("Fetching all products");
         return productRepository.findAll()
                 .stream().map(productMapper::toSimpleDto)
                 .collect(Collectors.toList());
@@ -49,6 +51,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public ProductDto createProduct(ProductRequestDto requestDto) {
+        log.info("Creating product");
         Long authorId = requestDto.getAuthorId();
         Long genreId = requestDto.getGenreId();
 
@@ -66,6 +69,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public ProductDto updateProduct(ProductRequestDto requestDto, Long id) {
+        log.info("Updating product {}", id);
         Long authorId = requestDto.getAuthorId();
         Long genreId = requestDto.getGenreId();
 
@@ -84,6 +88,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public void deleteProduct(Long id) {
+        log.info("Deleting product {}", id);
         if (!productRepository.existsById(id)) {
             throw new ProductNotFoundException(id);
         } else {

@@ -1,6 +1,7 @@
 package sk.martinliptak.ita.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sk.martinliptak.ita.domain.Cart;
@@ -17,6 +18,7 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CartServiceImpl implements CartService {
     private final CartRepository cartRepository;
     private final ProductRepository productRepository;
@@ -25,6 +27,7 @@ public class CartServiceImpl implements CartService {
     @Override
     @Transactional(readOnly = true)
     public CartDto findCart(Long id) {
+        log.info("Fetching cart {}", id);
         return cartRepository.findById(id)
                 .map(cartMapper::toDto)
                 .orElseThrow(() -> new CartNotFoundException(id));
@@ -33,6 +36,7 @@ public class CartServiceImpl implements CartService {
     @Override
     @Transactional
     public CartDto createCart(Long productId) {
+        log.info("Creating cart with product {}", productId);
         Cart cart = new Cart().setProducts(
                 Set.of(
                 productRepository.findById(productId)
@@ -46,6 +50,7 @@ public class CartServiceImpl implements CartService {
     @Override
     @Transactional
     public CartDto addToCart(Long id, Long productId) {
+        log.info("Adding product {} to cart {}", productId, id);
         Cart cart = cartRepository.findById(id)
                 .orElseThrow(() -> new CartNotFoundException(id));
         Product product = productRepository.findById(productId)
