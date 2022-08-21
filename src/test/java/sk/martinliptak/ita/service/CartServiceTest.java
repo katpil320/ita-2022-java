@@ -1,9 +1,9 @@
 package sk.martinliptak.ita.service;
 
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import sk.martinliptak.ita.domain.Cart;
 import sk.martinliptak.ita.domain.Product;
@@ -15,16 +15,16 @@ import sk.martinliptak.ita.repository.ProductRepository;
 import sk.martinliptak.ita.service.impl.CartServiceImpl;
 
 import java.util.Optional;
+import java.util.Set;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 import static sk.martinliptak.ita.mother.CartMother.*;
 import static sk.martinliptak.ita.mother.ProductMother.prepareProduct;
 import static sk.martinliptak.ita.mother.ProductMother.prepareProduct1;
 
 @ExtendWith(MockitoExtension.class)
-class CartServiceTest {
+class CartServiceTest implements WithAssertions {
     @InjectMocks
     private CartServiceImpl cartService;
     @Mock
@@ -33,6 +33,8 @@ class CartServiceTest {
     private CartMapper cartMapper;
     @Mock
     private ProductRepository productRepository;
+    @Captor
+    ArgumentCaptor<Cart> cartCaptor;
 
     @Test
     void findCart() {
@@ -76,6 +78,7 @@ class CartServiceTest {
         Long productId = 2L;
         Product targetProduct = prepareProduct1();
         Cart targetCart = prepareCart();
+        Set<Product> expectedProductsInCart = prepareCart1().getProducts();
         CartDto expectedResult = prepareCartDto1();
 
         when(cartRepository.findById(cartId)).thenReturn(Optional.of(targetCart));
@@ -84,6 +87,8 @@ class CartServiceTest {
 
         CartDto result = cartService.addToCart(cartId, productId);
 
+        verify(cartMapper).toDto(cartCaptor.capture()); // Capture modified cart
+        assertThat(cartCaptor.getValue().getProducts()).usingRecursiveComparison().isEqualTo(expectedProductsInCart);
         assertThat(result.getProducts()).usingRecursiveComparison().isEqualTo(expectedResult.getProducts());
     }
 
@@ -92,7 +97,7 @@ class CartServiceTest {
         Long id = 1L;
 
         when(cartRepository.findById(id)).thenReturn(Optional.empty());
-        assertThatThrownBy(() -> cartService.findCart(id)).isInstanceOf(CartNotFoundException.class);
+        assertThrows(CartNotFoundException.class, () -> cartService.findCart(id));
         verify(cartRepository).findById(id);
     }
 
@@ -102,8 +107,7 @@ class CartServiceTest {
         Long productId = 1L;
 
         when(cartRepository.findById(id)).thenReturn(Optional.empty());
-        assertThatThrownBy(() -> cartService.addToCart(id, productId)).isInstanceOf(CartNotFoundException.class);
+        assertThrows(CartNotFoundException.class, () -> cartService.addToCart(id, productId));
         verify(cartRepository).findById(id);
-
     }
 }

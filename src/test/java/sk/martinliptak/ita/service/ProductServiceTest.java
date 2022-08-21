@@ -1,6 +1,7 @@
 package sk.martinliptak.ita.service;
 
 import lombok.RequiredArgsConstructor;
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,21 +24,19 @@ import sk.martinliptak.ita.service.impl.ProductServiceImpl;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static sk.martinliptak.ita.mother.AuthorMother.prepareAuthor;
 import static sk.martinliptak.ita.mother.GenreMother.prepareGenre;
 import static sk.martinliptak.ita.mother.ProductMother.*;
 
-
 @ExtendWith(MockitoExtension.class)
 @RequiredArgsConstructor
-public class ProductServiceTest {
+public class ProductServiceTest implements WithAssertions {
 
     @InjectMocks
     private ProductServiceImpl productService;
-
     @Mock
     private ProductRepository productRepository;
     @Mock
@@ -145,7 +144,7 @@ public class ProductServiceTest {
         Long id = 1L;
 
         when(productRepository.findById(id)).thenReturn(Optional.empty());
-        assertThatThrownBy(() -> productService.findProduct(id)).isInstanceOf(ProductNotFoundException.class);
+        assertThrows(ProductNotFoundException.class, () -> productService.findProduct(id));
         verify(productRepository).findById(id);
     }
 
@@ -155,7 +154,7 @@ public class ProductServiceTest {
         ProductRequestDto createProductDto = prepareProductRequestDto();
 
         when(productRepository.findById(id)).thenReturn(Optional.empty());
-        assertThatThrownBy(() -> productService.updateProduct(createProductDto, 1L)).isInstanceOf(ProductNotFoundException.class);
+        assertThrows(ProductNotFoundException.class, () -> productService.updateProduct(createProductDto, id));
         verify(productRepository).findById(id);
     }
 
@@ -164,7 +163,7 @@ public class ProductServiceTest {
         Long id = 1L;
 
         when(productRepository.existsById(1L)).thenReturn(false);
-        assertThatThrownBy(() -> productService.deleteProduct(id)).isInstanceOf(ProductNotFoundException.class);
+        assertThrows(ProductNotFoundException.class, () -> productService.deleteProduct(id));
         verify(productRepository).existsById(id);
     }
 }

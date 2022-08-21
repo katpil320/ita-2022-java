@@ -1,5 +1,6 @@
 package sk.martinliptak.ita.service;
 
+import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,10 +18,9 @@ import java.util.List;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static sk.martinliptak.ita.mother.GenreMother.*;
-import static org.assertj.core.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-class GenreServiceTest {
+class GenreServiceTest implements WithAssertions {
     @InjectMocks
     private GenreServiceImpl genreService;
     @Mock
