@@ -5,6 +5,7 @@ import org.mapstruct.factory.Mappers;
 import sk.martinliptak.ita.domain.Product;
 import sk.martinliptak.ita.model.ProductRequestDto;
 import sk.martinliptak.ita.model.ProductDto;
+import sk.martinliptak.ita.model.ProductSimpleDto;
 
 
 import static org.assertj.core.api.Assertions.*;
@@ -20,6 +21,15 @@ class ProductMapperTest {
         ProductDto result = productMapper.toDto(source);
 
         assertThat(result.getId()).isEqualTo(source.getId());
+        assertThat(result).usingRecursiveComparison().isEqualTo(expectedResult);
+    }
+
+    @Test
+    void toSimpleDto() {
+        Product source = prepareProduct();
+        ProductSimpleDto expectedResult = prepareProductSimpleDto();
+        ProductSimpleDto result = productMapper.toSimpleDto(source);
+
         assertThat(result).usingRecursiveComparison().isEqualTo(expectedResult);
     }
 

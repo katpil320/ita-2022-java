@@ -101,7 +101,7 @@ public class ProductServiceTest {
 
         assertThat(result).isEqualTo(expectedResult);
 
-        verify(productRepository, times(1)).save(product);
+        verify(productRepository).save(product);
         verify(productMapper).toDto(product);
         verify(productMapper).toDomain(requestDto);
     }
@@ -140,21 +140,6 @@ public class ProductServiceTest {
         verify(productRepository).deleteById(targetId);
     }
 
-    @Test()
-    void whenProductNotFound() throws ProductNotFoundException {
-        ProductRequestDto createProductDto = prepareProductRequestDto();
-
-        when(productRepository.findById(1L)).thenReturn(Optional.empty());
-        when(productRepository.existsById(1L)).thenReturn(false);
-
-        assertThatThrownBy(() -> productService.findProduct(1L)).isInstanceOf(ProductNotFoundException.class);
-        assertThatThrownBy(() -> productService.updateProduct(createProductDto, 1L)).isInstanceOf(ProductNotFoundException.class);
-        assertThatThrownBy(() -> productService.deleteProduct(1L)).isInstanceOf(ProductNotFoundException.class);
-
-        verify(productRepository, times(2)).findById(1L);
-        verify(productRepository).existsById(1L);
-    }
-
     @Test
     void fetchingNonExistingProduct() throws ProductNotFoundException {
         Long id = 1L;
@@ -177,9 +162,9 @@ public class ProductServiceTest {
     @Test
     void deletingNonExistingProduct() throws ProductNotFoundException {
         Long id = 1L;
+
         when(productRepository.existsById(1L)).thenReturn(false);
         assertThatThrownBy(() -> productService.deleteProduct(id)).isInstanceOf(ProductNotFoundException.class);
-
         verify(productRepository).existsById(id);
     }
 }
