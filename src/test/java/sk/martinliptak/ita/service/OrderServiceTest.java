@@ -52,7 +52,7 @@ class OrderServiceTest {
 
         OrderDto result = orderService.createOrder(cartId);
 
-        verify(orderMapper).toDto(orderCaptor.capture()); // Capture new order
+        verify(orderRepository).save(orderCaptor.capture()); // Capture saved order
 
         assertThat(result).usingRecursiveComparison().isEqualTo(expectedResult);
         assertThat(orderCaptor.getValue().getProducts()).usingRecursiveComparison().isEqualTo(expectedProductsInOrder);
