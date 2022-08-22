@@ -11,16 +11,11 @@ import javax.validation.constraints.NotBlank;
 @Setter
 @NoArgsConstructor
 @ToString
-public class ProductDto {
+public class ProductSimpleDto {
     private Long id;
     @NotBlank
     private String name;
-    private String description;
     @NotBlank
     private String image;
     private Long price;
-    private Long stock;
-
-    private AuthorDto author;
-    private GenreDto genre;
 }
