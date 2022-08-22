@@ -1,24 +1,28 @@
 package sk.martinliptak.ita.domain;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-@Accessors(chain = true)
-public class Product {
-    @Id
-    @GeneratedValue
-    private Long id;
+@ToString
+public class Product extends AbstractEntity {
     private String name;
-    @Size(max = 512)
-    private String description;
+    @Size(max = 512) private String description;
     private Long price;
     private Long stock;
     private String image;
+
+    @ManyToOne
+    private Genre genre;
+
+    @ManyToOne
+    private Author author;
 }
