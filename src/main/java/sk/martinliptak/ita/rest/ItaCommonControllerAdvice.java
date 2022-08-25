@@ -1,6 +1,7 @@
 package sk.martinliptak.ita.rest;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,6 +57,19 @@ public class ItaCommonControllerAdvice extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(
                 ex,
                 new ExceptionDto("0002", errors),
+                new HttpHeaders(),
+                HttpStatus.BAD_REQUEST,
+                request
+        );
+    }
+
+    @Override
+    public ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        ServletWebRequest servletWebRequest = (ServletWebRequest) request;
+        log.error("An exception occurred while processing " + servletWebRequest.getRequest().getMethod() + " on " + servletWebRequest.getRequest().getRequestURL(), ex);
+        return handleExceptionInternal(
+                ex,
+                new ExceptionDto("0002", "Type mismatch error"),
                 new HttpHeaders(),
                 HttpStatus.BAD_REQUEST,
                 request
