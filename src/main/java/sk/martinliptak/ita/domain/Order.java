@@ -14,7 +14,7 @@ public class Order extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "eshop_order_products",
             joinColumns = @JoinColumn(name = "fk_eshop_order"),
