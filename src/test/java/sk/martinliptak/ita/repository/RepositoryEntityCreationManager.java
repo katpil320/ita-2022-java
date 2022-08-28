@@ -10,6 +10,17 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
+
+/*
+* This class acts like a mother for preparing entities for DB testing
+*
+* Feel free to add your own repository, prepare() method and also customize cleaning
+*
+* Please be aware of this:
+* - Fetch type EAGER needed for each entity that has relation to other entity
+* - Cleaning repositories must be specified in correct order to prevent removing
+*   entities with foreign keys or relationships
+*/
 @Component
 @RequiredArgsConstructor
 @Slf4j
