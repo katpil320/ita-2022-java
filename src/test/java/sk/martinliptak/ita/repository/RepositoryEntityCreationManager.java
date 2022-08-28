@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import sk.martinliptak.ita.domain.*;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -17,7 +18,7 @@ import java.util.Set;
 * Feel free to add your own repository, prepare() method and also customize cleaning
 *
 * Please be aware of this:
-* - Fetch type EAGER needed for each entity that has relation to other entity
+* - Fetch type EAGER needed for each entity that has relation to other entity OR use @transactional in testing method
 * - Cleaning repositories must be specified in correct order to prevent removing
 *   entities with foreign keys or relationships
 */
@@ -77,7 +78,7 @@ public class RepositoryEntityCreationManager {
         Cart cart = this.prepareCart();
         Order order = new Order()
                 .setStatus(OrderStatus.NEW)
-                .setProducts(cart.getProducts());
+                .setProducts(new HashSet<>(cart.getProducts()));
         log.debug("Creating order");
         return orderRepository.save(order);
     }

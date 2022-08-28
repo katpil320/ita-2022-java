@@ -10,7 +10,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 public class Cart extends AbstractEntity {
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(
             name = "cart_products",
             joinColumns = @JoinColumn(name = "fk_cart"),

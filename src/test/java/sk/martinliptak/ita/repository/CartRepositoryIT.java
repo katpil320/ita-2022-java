@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 import sk.martinliptak.ita.domain.Cart;
 
 @SpringBootTest
@@ -16,6 +17,7 @@ class CartRepositoryIT implements WithAssertions {
     private RepositoryEntityCreationManager repositoryEntityCreationManager;
 
     @Test
+    @Transactional
     void CreateAndRetrieve() {
         Cart cart = repositoryEntityCreationManager.prepareCart();
 
