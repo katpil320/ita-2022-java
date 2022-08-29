@@ -1,6 +1,5 @@
 package sk.martinliptak.ita.rest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -28,9 +27,6 @@ class ProductControllerTest extends AbstractControllerTest {
     private MockMvc mockMvc;
     @MockBean
     private ProductServiceImpl productService;
-    @Autowired
-    private ObjectMapper objectMapper;
-
     private final String adminAuthToken = "Basic YWRtaW46cGFzc3dvcmQ="; // Base 64
 
     @Test
@@ -39,40 +35,40 @@ class ProductControllerTest extends AbstractControllerTest {
         when(productService.findProduct(1L)).thenReturn(productDto);
         mockMvc.perform(get("/api/v1/products/1"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(productDto)));
+                .andExpect(content().json(getJsonContent("/responses/findProduct.json")));
     }
 
     @Test
     void findProduct_notFound() throws Exception {
         when(productService.findProduct(1L)).thenThrow(new ProductNotFoundException(1L));
         mockMvc.perform(get("/api/v1/products/1"))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(content().json(getJsonContent("/responses/findProduct_notFound.json")));
 
     }
 
     @Test
     void findAllProducts() throws Exception {
-        List<ProductSimpleDto> productDtos = List.of(prepareProductSimpleDto(), prepareProductSimpleDto1());
-        when(productService.findAllProducts()).thenReturn(productDtos);
+        List<ProductSimpleDto> productSimpleDtos = List.of(prepareProductSimpleDto(), prepareProductSimpleDto1());
+        when(productService.findAllProducts()).thenReturn(productSimpleDtos);
         mockMvc.perform(get("/api/v1/products"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(productDtos)));
+                .andExpect(content().json(getJsonContent("/responses/findAllProducts.json")));
     }
 
-    // ISSUE: Unparsable JSON string
     @Test
     void createProduct() throws Exception {
-        ProductDto productDto = prepareProductDto();
         ProductRequestDto productRequestDto = prepareProductRequestDto();
+        ProductDto productDto = prepareProductDto();
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.AUTHORIZATION, adminAuthToken);
         when(productService.createProduct(productRequestDto)).thenReturn(productDto);
         mockMvc.perform(post("/api/v1/products")
                         .headers(headers)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(productRequestDto)))
+                        .content(getJsonContent("/requests/createProduct.json")))
                 .andExpect(status().isOk())
-                .andExpect(content().json((objectMapper.writeValueAsString(productDto))));
+                .andExpect(content().json(getJsonContent("/responses/createProduct.json")));
     }
 
     @Test
@@ -85,8 +81,24 @@ class ProductControllerTest extends AbstractControllerTest {
         mockMvc.perform(put("/api/v1/products/1")
                         .headers(headers)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(productRequestDto)))
-                .andExpect(status().isOk());
+                        .content(getJsonContent("/requests/updateProduct.json")))
+                .andExpect(status().isOk())
+                .andExpect(content().json(getJsonContent("/responses/updateProduct.json")));
+    }
+
+    @Test
+    void updateProduct_notFound() throws Exception {
+        ProductRequestDto productRequestDto = prepareProductRequestDto();
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.AUTHORIZATION, adminAuthToken);
+        when(productService.updateProduct(productRequestDto, 1L)).thenThrow(new ProductNotFoundException(1L));
+        mockMvc.perform(put("/api/v1/products/1")
+                        .headers(headers)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(getJsonContent("/requests/updateProduct.json")))
+                .andExpect(status().isNotFound())
+                .andExpect(content().json(getJsonContent("/responses/updateProduct_notFound.json")));
+
     }
 
     @Test

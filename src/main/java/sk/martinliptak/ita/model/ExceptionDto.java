@@ -1,9 +1,9 @@
 package sk.martinliptak.ita.model;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-@Getter
+@Data
 @RequiredArgsConstructor
 public class ExceptionDto {
     private final String code;

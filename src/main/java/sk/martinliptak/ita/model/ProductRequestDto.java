@@ -5,10 +5,8 @@ import sk.martinliptak.ita.annotation.StartsWithUppercase;
 
 import javax.validation.constraints.*;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
-@ToString
 public class ProductRequestDto {
     @NotBlank
     @Size(max = 256)
