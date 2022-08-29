@@ -1,9 +1,9 @@
-create sequence hibernate_sequence start 1000 increment 1;
+create sequence hibernate_sequence start with 1000 increment by 1;
 create table author
 (
     id          int8 not null,
-    created_at  timestamp,
-    modified_at timestamp,
+    created_at  timestamp(9),
+    modified_at timestamp(9),
     bio         varchar(255),
     birth_date  date,
     name        varchar(255),
@@ -12,8 +12,8 @@ create table author
 create table cart
 (
     id          int8 not null,
-    created_at  timestamp,
-    modified_at timestamp,
+    created_at  timestamp(9),
+    modified_at timestamp(9),
     primary key (id)
 );
 create table cart_products
@@ -25,8 +25,8 @@ create table cart_products
 create table eshop_order
 (
     id          int8 not null,
-    created_at  timestamp,
-    modified_at timestamp,
+    created_at  timestamp(9),
+    modified_at timestamp(9),
     status      varchar(255),
     primary key (id)
 );
@@ -39,8 +39,8 @@ create table eshop_order_products
 create table genre
 (
     id          int8 not null,
-    created_at  timestamp,
-    modified_at timestamp,
+    created_at  timestamp(9),
+    modified_at timestamp(9),
     description varchar(255),
     name        varchar(255),
     primary key (id)
@@ -48,8 +48,8 @@ create table genre
 create table product
 (
     id          int8 not null,
-    created_at  timestamp,
-    modified_at timestamp,
+    created_at  timestamp(9),
+    modified_at timestamp(9),
     description varchar(512),
     image       varchar(255),
     name        varchar(255),

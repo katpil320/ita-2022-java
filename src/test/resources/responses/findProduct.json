@@ -1,0 +1,19 @@
+{
+  "id": 1,
+  "name": "Začínáme programovat v jazyku Java",
+  "description": "Tato publikace uvádí čtenáře do světa programování...",
+  "image": "https://img.grada.cz/_t_/media/sprinx.bookimages/130627_350_0_fit.jpg",
+  "price": 450,
+  "stock": 21,
+  "author": {
+    "id": 1,
+    "name": "Peter Smutny",
+    "bio": "Som zruteny",
+    "birthDate": "1956-02-03"
+  },
+  "genre": {
+    "id": 1,
+    "name": "Drama",
+    "description": "Super napinave dejstva"
+  }
+}
