@@ -29,12 +29,7 @@ public class SecurityConfiguration {
                 .password("password")
                 .roles("ADMIN")
                 .build();
-        UserDetails user = User.withDefaultPasswordEncoder()
-                .username("user")
-                .password("password")
-                .roles("USER")
-                .build();
-        return new InMemoryUserDetailsManager(user, adminUser);
+        return new InMemoryUserDetailsManager(adminUser);
     }
 
     @Bean
@@ -47,6 +42,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests((authz) -> authz
                         .antMatchers(HttpMethod.GET, "/api/v1/products/**", "/api/v1/authors/**", "/api/v1/genres/**", "/api/v1/carts/{id:\\d+}").permitAll()
                         .antMatchers(HttpMethod.POST, "/api/v1/carts/**", "/api/v1/orders/cart/**").permitAll()
+                        .antMatchers(HttpMethod.PUT, "/api/v1/carts/{cartId:\\d+}/products/{productId:\\d+}").permitAll()
                         .anyRequest().hasRole("ADMIN")
                 )
                 .httpBasic(withDefaults());

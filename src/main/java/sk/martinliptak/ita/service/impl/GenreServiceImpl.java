@@ -23,8 +23,8 @@ public class GenreServiceImpl implements GenreService {
     @Transactional(readOnly = true)
     public Collection<GenreDto> findAllGenres() {
         log.info("Fetching all genres");
-        return genreRepository.findAll()
-                .stream().map(genreMapper::toDto)
+        return genreRepository.findAll().stream()
+                .map(genreMapper::toDto)
                 .collect(Collectors.toList());
     }
 }

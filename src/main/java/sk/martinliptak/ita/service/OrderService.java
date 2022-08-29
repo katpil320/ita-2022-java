@@ -9,5 +9,5 @@ public interface OrderService {
     OrderDto createOrder(Long cartId);
     List<OrderDto> findAllOrders();
 
-    OrderDto updateProduct(Long orderId, OrderStatus status);
+    OrderDto updateStatus(Long orderId, OrderStatus status);
 }

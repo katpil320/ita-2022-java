@@ -44,14 +44,14 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional(readOnly = true)
     public List<OrderDto> findAllOrders() {
-        return orderRepository.findAll()
-                .stream().map(orderMapper::toDto)
+        return orderRepository.findAll().stream()
+                .map(orderMapper::toDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public OrderDto updateProduct(Long orderId, OrderStatus status) {
+    public OrderDto updateStatus(Long orderId, OrderStatus status) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new OrderNotFoundException(orderId));
         order.setStatus(status);

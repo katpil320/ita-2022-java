@@ -3,27 +3,27 @@ package sk.martinliptak.ita.repository;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import sk.martinliptak.ita.domain.Genre;
+import sk.martinliptak.ita.mother.GenreMother;
 
-
-@SpringBootTest
-@AutoConfigureTestDatabase
-class GenreRepositoryIT implements WithAssertions {
+@DataJpaTest
+public class GenreRepositoryIT implements WithAssertions {
     @Autowired
     private GenreRepository genreRepository;
     @Autowired
-    private RepositoryEntityCreationManager repositoryEntityCreationManager;
+    private TestEntityManager testEntityManager;
 
     @Test
-    void CreateAndRetrieve() {
-        Genre genre = repositoryEntityCreationManager.prepareGenre();
-
+    void createAndRetrieve() {
+        Genre genre = GenreMother.prepareGenre();
+        genre.setId(null);
+        testEntityManager.persistAndFlush(genre);
+        testEntityManager.detach(genre);
         Genre result = genreRepository.findById(genre.getId()).get();
         assertThat(result).usingRecursiveComparison().isEqualTo(genre);
 
-        repositoryEntityCreationManager.clean();
+        genreRepository.deleteById(genre.getId());
     }
-
 }
