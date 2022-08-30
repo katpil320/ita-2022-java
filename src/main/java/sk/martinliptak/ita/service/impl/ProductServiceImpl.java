@@ -43,8 +43,8 @@ public class ProductServiceImpl implements ProductService {
     @Transactional(readOnly = true)
     public Collection<ProductSimpleDto> findAllProducts() {
         log.info("Fetching all products");
-        return productRepository.findAll()
-                .stream().map(productMapper::toSimpleDto)
+        return productRepository.findAll().stream()
+                .map(productMapper::toSimpleDto)
                 .collect(Collectors.toList());
     }
 

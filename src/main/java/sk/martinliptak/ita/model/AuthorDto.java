@@ -1,16 +1,11 @@
 package sk.martinliptak.ita.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDate;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
-@ToString
 public class AuthorDto {
     private Long id;
     private String name;

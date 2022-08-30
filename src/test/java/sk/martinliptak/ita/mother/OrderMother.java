@@ -19,6 +19,7 @@ public class OrderMother {
     public static OrderDto prepareOrderDto() {
         return new OrderDto()
                 .setId(1L)
-                .setProducts(Set.of(prepareProductSimpleDto(), prepareProductSimpleDto1()));
+                .setProducts(Set.of(prepareProductSimpleDto(), prepareProductSimpleDto1()))
+                .setStatus(OrderStatus.NEW);
     }
 }
