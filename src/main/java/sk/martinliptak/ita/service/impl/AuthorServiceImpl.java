@@ -23,8 +23,8 @@ public class AuthorServiceImpl implements AuthorService {
     @Transactional(readOnly = true)
     public Collection<AuthorDto> findAllAuthors() {
         log.info("Fetching all authors");
-        return authorRepository.findAll()
-                .stream().map(authorMapper::toDto)
+        return authorRepository.findAll().stream()
+                .map(authorMapper::toDto)
                 .collect(Collectors.toList());
     }
 }
