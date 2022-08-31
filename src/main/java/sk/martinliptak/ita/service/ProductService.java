@@ -1,5 +1,7 @@
 package sk.martinliptak.ita.service;
 
+import org.springframework.web.multipart.MultipartFile;
+import sk.martinliptak.ita.model.ProductPreviewResponse;
 import sk.martinliptak.ita.model.ProductRequestDto;
 import sk.martinliptak.ita.model.ProductDto;
 import sk.martinliptak.ita.model.ProductSimpleDto;
@@ -49,4 +51,8 @@ public interface ProductService {
      * @throws sk.martinliptak.ita.exception.ProductNotFoundException if the product doesn't exist
      */
     void deleteProduct(Long id);
+
+    void addPreview(Long id, MultipartFile file);
+
+    ProductPreviewResponse getPreview(Long id);
 }
