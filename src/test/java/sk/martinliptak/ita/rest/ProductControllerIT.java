@@ -1,7 +1,7 @@
 package sk.martinliptak.ita.rest;
 
 import org.assertj.core.api.WithAssertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,7 +34,7 @@ class ProductControllerIT implements WithAssertions {
 
     private final String adminAuthToken = "Basic YWRtaW46cGFzc3dvcmQ=";
 
-    @BeforeEach
+    @AfterEach
     void clean() {
         productRepository.deleteAll();
         authorRepository.deleteAll();

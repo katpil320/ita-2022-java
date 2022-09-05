@@ -1,0 +1,17 @@
+{
+  "id": 1,
+  "products": [
+    {
+      "id": 1,
+      "name": "Začínáme programovat v jazyku Java",
+      "image": "https://img.grada.cz/_t_/media/sprinx.bookimages/130627_350_0_fit.jpg",
+      "price": 450
+    },
+    {
+      "id": 2,
+      "name": "Pat a Mat nás baví ",
+      "image": "https://mrtns.eu/tovar/_l/463/l463501.jpg?v=16596936211",
+      "price": 249
+    }
+  ]
+}

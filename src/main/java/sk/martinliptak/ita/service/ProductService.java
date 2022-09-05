@@ -52,7 +52,19 @@ public interface ProductService {
      */
     void deleteProduct(Long id);
 
+    /**
+     * Adds preview for product
+     * @param id of product
+     * @param file
+     */
+
     void addPreview(Long id, MultipartFile file);
+
+    /**
+     * Retrieves preview of the product
+     * @param id of product
+     * @return {@link ProductPreviewResponse}
+     */
 
     ProductPreviewResponse getPreview(Long id);
 }

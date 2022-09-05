@@ -1,6 +1,7 @@
 package sk.martinliptak.ita.rest;
 
 import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +23,11 @@ class AuthorControllerIT implements WithAssertions {
     private TestRestTemplate testRestTemplate;
     @Autowired
     private AuthorRepository authorRepository;
+
+    @AfterEach
+    void clean() {
+        authorRepository.deleteAll();
+    }
 
     @Test
     void findAllAuthors() {
