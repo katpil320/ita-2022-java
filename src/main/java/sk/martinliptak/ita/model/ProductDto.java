@@ -18,4 +18,5 @@ public class ProductDto {
 
     private AuthorDto author;
     private GenreDto genre;
+    private Boolean preview;
 }
