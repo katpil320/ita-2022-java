@@ -1,6 +1,9 @@
 package sk.martinliptak.ita.service;
 
+import org.springframework.transaction.annotation.Transactional;
 import sk.martinliptak.ita.model.CartDto;
+
+import java.time.Instant;
 
 /**
  * A service for manipulating carts
@@ -32,4 +35,12 @@ public interface CartService {
      * @throws sk.martinliptak.ita.exception.CartNotFoundException if the cart doesn't exist
      */
     CartDto addToCart(Long id,Long productId);
+
+
+    /**
+     * Removes all unused carts before target timestamp
+     * @param beforeInstant
+     */
+    @Transactional
+    void deleteUnusedCarts(Instant beforeInstant);
 }

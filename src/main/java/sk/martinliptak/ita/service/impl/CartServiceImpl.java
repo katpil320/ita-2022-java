@@ -14,6 +14,8 @@ import sk.martinliptak.ita.repository.CartRepository;
 import sk.martinliptak.ita.repository.ProductRepository;
 import sk.martinliptak.ita.service.CartService;
 
+import java.time.Instant;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -57,5 +59,13 @@ public class CartServiceImpl implements CartService {
                 .orElseThrow(() -> new ProductNotFoundException(productId));
         cart.getProducts().add(product);
         return cartMapper.toDto(cart);
+    }
+
+    @Override
+    @Transactional
+    public void deleteUnusedCarts(Instant beforeInstant) {
+        List<Cart> unusedCarts = cartRepository.findAllByModifiedAtBefore(beforeInstant);
+        log.info("{} carts are being deleted", unusedCarts.size());
+        cartRepository.deleteAll(unusedCarts);
     }
 }
