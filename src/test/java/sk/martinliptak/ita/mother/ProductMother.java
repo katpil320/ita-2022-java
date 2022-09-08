@@ -43,7 +43,8 @@ public class ProductMother {
                 .setPrice(450L)
                 .setStock(21L)
                 .setAuthor(prepareAuthorDto())
-                .setGenre(prepareGenreDto());
+                .setGenre(prepareGenreDto())
+                .setPreview(false);
     }
     public static ProductDto prepareProductDto1() {
         return new ProductDto()
@@ -54,7 +55,8 @@ public class ProductMother {
                 .setPrice(249L)
                 .setStock(1432L)
                 .setAuthor(prepareAuthorDto1())
-                .setGenre(prepareGenreDto1());
+                .setGenre(prepareGenreDto1())
+                .setPreview(false);
     }
     public static ProductRequestDto prepareProductRequestDto() {
         return new ProductRequestDto()
