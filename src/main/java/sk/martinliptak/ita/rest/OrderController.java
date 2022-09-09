@@ -25,7 +25,7 @@ public class OrderController {
     }
 
     @PutMapping("{orderId}/status/{status}")
-    public OrderDto updateOrder(@PathVariable("orderId") Long orderId, @PathVariable("status") OrderStatus status) {
+    public OrderDto updateOrderStatus(@PathVariable("orderId") Long orderId, @PathVariable("status") OrderStatus status) {
         return orderService.updateStatus(orderId, status);
     }
 }

@@ -19,6 +19,7 @@ public class Product extends AbstractEntity {
     private Long price;
     private Long stock;
     private String image;
+    private String preview_file_name;
 
     @ManyToOne
     private Genre genre;

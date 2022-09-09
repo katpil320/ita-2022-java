@@ -6,6 +6,9 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,15 +17,17 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 @RequiredArgsConstructor
 public class BaseServiceAspect {
-    private final HttpServletRequest request;
-
     @Around("execution(* sk.martinliptak.ita.service.impl.*.*(..))")
     public Object aroundAllServiceMethods(ProceedingJoinPoint pjp) throws Throwable {
-        log.debug("Incoming {} request on {}", request.getMethod(), request.getRequestURL());
-        log.debug("Executing {} - with args {}", pjp.getSignature(), pjp.getArgs());
+        RequestAttributes attribs = RequestContextHolder.getRequestAttributes();
+        if (attribs != null) {
+            HttpServletRequest request = ((ServletRequestAttributes) attribs).getRequest();
+            log.debug("Incoming {} request on {}", request.getMethod(), request.getRequestURL());
+            log.debug("Executing {} - with args {}", pjp.getSignature(), pjp.getArgs());
+        }
         Object result = pjp.proceed();
         if (result != null) {
-        log.debug("Method {} finished and returned {}", pjp.getSignature().getName(), result);
+            log.debug("Method {} finished and returned {}", pjp.getSignature().getName(), result);
         } else {
             log.debug("Method {} finished", pjp.getSignature().getName());
         }
