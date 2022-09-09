@@ -1,6 +1,7 @@
 package sk.martinliptak.ita.rest;
 
 import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,6 +24,10 @@ class GenreControllerIT implements WithAssertions {
     @Autowired
     private GenreRepository genreRepository;
 
+    @AfterEach
+    void clean() {
+        genreRepository.deleteAll();
+    }
     @Test
     void findAllGenres() {
         Genre genre = prepareGenre();

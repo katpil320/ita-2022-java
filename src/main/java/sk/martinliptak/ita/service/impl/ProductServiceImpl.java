@@ -1,15 +1,25 @@
 package sk.martinliptak.ita.service.impl;
 
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.S3ObjectInputStream;
+import com.amazonaws.util.IOUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import sk.martinliptak.ita.configuration.AmazonConfig;
 import sk.martinliptak.ita.domain.Product;
 import sk.martinliptak.ita.exception.AuthorNotFoundException;
+import sk.martinliptak.ita.exception.FileNotReadableException;
 import sk.martinliptak.ita.exception.GenreNotFoundException;
 import sk.martinliptak.ita.exception.ProductNotFoundException;
 import sk.martinliptak.ita.mapper.ProductMapper;
 import sk.martinliptak.ita.model.ProductDto;
+import sk.martinliptak.ita.model.ProductPreviewResponse;
 import sk.martinliptak.ita.model.ProductRequestDto;
 import sk.martinliptak.ita.model.ProductSimpleDto;
 import sk.martinliptak.ita.repository.AuthorRepository;
@@ -17,6 +27,7 @@ import sk.martinliptak.ita.repository.GenreRepository;
 import sk.martinliptak.ita.repository.ProductRepository;
 import sk.martinliptak.ita.service.ProductService;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -28,8 +39,9 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final AuthorRepository authorRepository;
     private final GenreRepository genreRepository;
-
     private final ProductMapper productMapper;
+    private final AmazonS3 amazonS3;
+    private final AmazonConfig amazonConfig;
 
     @Transactional(readOnly = true)
     public ProductDto findProduct(Long id) {
@@ -93,6 +105,48 @@ public class ProductServiceImpl implements ProductService {
             throw new ProductNotFoundException(id);
         } else {
             productRepository.deleteById(id);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void addPreview(Long id, MultipartFile file) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(id));
+
+        String filename = product.getId() + "_" + file.getOriginalFilename();
+
+        try {
+            amazonS3.putObject(amazonConfig.getBucketName(),
+                    filename,
+                    file.getInputStream(),
+                    new ObjectMetadata());
+        } catch (IOException e) {
+            throw new FileNotReadableException();
+        }
+
+        if (product.getPreview_file_name() != null) {
+            amazonS3.deleteObject(amazonConfig.getBucketName(), product.getPreview_file_name());
+        }
+
+        product.setPreview_file_name(filename);
+    }
+
+    @Override
+    @Transactional
+    public ProductPreviewResponse getPreview(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(id));
+        String filename = product.getPreview_file_name();
+
+        try {
+            S3Object object = amazonS3.getObject(amazonConfig.getBucketName(), filename);
+            S3ObjectInputStream objectContent = object.getObjectContent();
+            return new ProductPreviewResponse()
+                    .setFilename(filename)
+                    .setBytes(IOUtils.toByteArray(objectContent));
+        } catch (AmazonServiceException | IOException e) {
+            throw new FileNotReadableException();
         }
     }
 }

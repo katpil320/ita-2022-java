@@ -1,0 +1,11 @@
+{
+  "id": 1,
+  "products": [
+    {
+      "id": 1,
+      "name": "Začínáme programovat v jazyku Java",
+      "image": "https://img.grada.cz/_t_/media/sprinx.bookimages/130627_350_0_fit.jpg",
+      "price": 450
+    }
+  ]
+}

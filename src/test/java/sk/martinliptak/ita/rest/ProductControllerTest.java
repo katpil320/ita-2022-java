@@ -35,7 +35,7 @@ class ProductControllerTest extends AbstractControllerTest {
         when(productService.findProduct(1L)).thenReturn(productDto);
         mockMvc.perform(get("/api/v1/products/1"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(getJsonContent("/responses/findProduct.json")));
+                .andExpect(content().json(getJsonContent("/responses/products/findProduct.json")));
     }
 
     @Test
@@ -43,7 +43,7 @@ class ProductControllerTest extends AbstractControllerTest {
         when(productService.findProduct(1L)).thenThrow(new ProductNotFoundException(1L));
         mockMvc.perform(get("/api/v1/products/1"))
                 .andExpect(status().isNotFound())
-                .andExpect(content().json(getJsonContent("/responses/findProduct_notFound.json")));
+                .andExpect(content().json(getJsonContent("/responses/products/findProduct_notFound.json")));
 
     }
 
@@ -53,7 +53,7 @@ class ProductControllerTest extends AbstractControllerTest {
         when(productService.findAllProducts()).thenReturn(productSimpleDtos);
         mockMvc.perform(get("/api/v1/products"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(getJsonContent("/responses/findAllProducts.json")));
+                .andExpect(content().json(getJsonContent("/responses/products/findAllProducts.json")));
     }
 
     @Test
@@ -66,9 +66,9 @@ class ProductControllerTest extends AbstractControllerTest {
         mockMvc.perform(post("/api/v1/products")
                         .headers(headers)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(getJsonContent("/requests/createProduct.json")))
+                        .content(getJsonContent("/requests/products/createProduct.json")))
                 .andExpect(status().isOk())
-                .andExpect(content().json(getJsonContent("/responses/createProduct.json")));
+                .andExpect(content().json(getJsonContent("/responses/products/createProduct.json")));
     }
 
     @Test
@@ -81,9 +81,9 @@ class ProductControllerTest extends AbstractControllerTest {
         mockMvc.perform(put("/api/v1/products/1")
                         .headers(headers)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(getJsonContent("/requests/updateProduct.json")))
+                        .content(getJsonContent("/requests/products/updateProduct.json")))
                 .andExpect(status().isOk())
-                .andExpect(content().json(getJsonContent("/responses/updateProduct.json")));
+                .andExpect(content().json(getJsonContent("/responses/products/updateProduct.json")));
     }
 
     @Test
@@ -95,9 +95,9 @@ class ProductControllerTest extends AbstractControllerTest {
         mockMvc.perform(put("/api/v1/products/1")
                         .headers(headers)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(getJsonContent("/requests/updateProduct.json")))
+                        .content(getJsonContent("/requests/products/updateProduct.json")))
                 .andExpect(status().isNotFound())
-                .andExpect(content().json(getJsonContent("/responses/updateProduct_notFound.json")));
+                .andExpect(content().json(getJsonContent("/responses/products/updateProduct_notFound.json")));
 
     }
 
