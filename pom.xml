@@ -100,6 +100,10 @@
             <artifactId>aws-java-sdk</artifactId>
             <version>1.12.286</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web-services</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -160,6 +164,46 @@
                     <includes>
                         <include>**/*IT</include>
                     </includes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jvnet.jaxb2.maven2</groupId>
+                <artifactId>maven-jaxb2-plugin</artifactId>
+                <version>0.15.1</version>
+                <executions>
+                    <execution>
+                        <id>schema-request-generate</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <generatePackage>cz.ares.request</generatePackage>
+                            <generateDirectory>${project.build.directory}/generated-sources/xjc-a</generateDirectory>
+                            <schemas>
+                                <schema>
+                                    <url>http://wwwinfo.mfcr.cz/ares/xml_doc/schemas/ares/ares_request_rzp/v_1.0.4/ares_request_rzp_v_1.0.4.xsd</url>
+                                </schema>
+                            </schemas>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>schema-response-generate</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <generateDirectory>${project.build.directory}/generated-sources/xjc-b</generateDirectory>
+                            <generatePackage>cz.ares.response</generatePackage>
+                            <schemas>
+                                <schema>
+                                    <url>http://wwwinfo.mfcr.cz/ares/xml_doc/schemas/ares/ares_answer_rzp/v_1.0.5/ares_answer_rzp_v_1.0.5.xsd</url>
+                                </schema>
+                            </schemas>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <schemaLanguage>WSDL</schemaLanguage>
                 </configuration>
             </plugin>
         </plugins>
