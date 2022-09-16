@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import sk.martinliptak.ita.client.ItaWarehouseClient;
 import sk.martinliptak.ita.configuration.AmazonConfig;
 import sk.martinliptak.ita.domain.Product;
 import sk.martinliptak.ita.exception.AuthorNotFoundException;
@@ -29,6 +30,7 @@ import sk.martinliptak.ita.service.ProductService;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -42,6 +44,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductMapper productMapper;
     private final AmazonS3 amazonS3;
     private final AmazonConfig amazonConfig;
+    private final ItaWarehouseClient itaWarehouseClient;
 
     @Transactional(readOnly = true)
     public ProductDto findProduct(Long id) {
@@ -133,7 +136,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public ProductPreviewResponse getPreview(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
@@ -147,6 +150,15 @@ public class ProductServiceImpl implements ProductService {
                     .setBytes(IOUtils.toByteArray(objectContent));
         } catch (AmazonServiceException | IOException e) {
             throw new FileNotReadableException();
+        }
+    }
+
+    @Override
+    @Transactional
+    public void updateStockFromWarehouse() {
+        List<Product> products = productRepository.findAll();
+        for (Product p : products) {
+            p.setStock(itaWarehouseClient.getStock(p.getId()));
         }
     }
 }

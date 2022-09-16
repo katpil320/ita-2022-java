@@ -45,6 +45,7 @@ public interface ProductService {
      */
     ProductDto updateProduct(ProductRequestDto productDto, Long id);
 
+
     /**
      * Deletes product
      * @param id of product
@@ -57,14 +58,16 @@ public interface ProductService {
      * @param id of product
      * @param file
      */
-
     void addPreview(Long id, MultipartFile file);
-
     /**
      * Retrieves preview of the product
      * @param id of product
      * @return {@link ProductPreviewResponse}
      */
-
     ProductPreviewResponse getPreview(Long id);
+
+    /**
+     * Updates all products stock from warehouse client
+     */
+    void updateStockFromWarehouse();
 }
