@@ -9,9 +9,17 @@ Can be used as a backend for frontend application.
 ## Getting started
 
 Before you can start this app, make sure you've set proper configuration and have running instance of PostgresSQL database.
-By default, the app is configured to run along with docker-compose file in root directory. If you want to use your own database,
+By default, the app is configured to run along with docker-compose file in root directory. 
+
+To run the database, run terminal in a root directory of this app and type
+`docker-compose up`.
+If you want to remove the database container, type:
+`docker-compose down -v`.
+After that, you can start the application by main method in `src/main/java/sk.martinliptak.ita/ItaApplication`.
+
+If you want to use your own database,
 navigate to src/main/resources/application.properties and change following:
-- `spring.datasource.url=(example: dbc:postgresql://localhost:5421/the_database_name)`
+- `spring.datasource.url=(example: jdbc:postgresql://localhost:5421/the_database_name)`
 - `spring.datasource.username=(db_username)`
 - `spring.datasource.password=(db_user_password)`
 
